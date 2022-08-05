@@ -1,9 +1,26 @@
+import bcrypt from 'bcrypt';
 import STATUS from '../utils/statusCodes.js';
 import getUserByEmail from '../utils/users/getUserByEmail.js';
 import createUserAccount from '../utils/users/createUserAccount.js';
+import generateToken from '../utils/token/generateToken.js';
 
 async function signIn(req, res) {
-  res.sendStatus(STATUS.OK);
+  const { email, password } = req.locals;
+
+  try {
+    const user = await getUserByEmail(email);
+
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      res.sendStatus(STATUS.UNAUTHORIZED);
+      return;
+    }
+
+    const token = generateToken(user.id);
+
+    res.send({ token }).status(STATUS.OK);
+  } catch (error) {
+    res.sendStatus(STATUS.INTERNAL_SERVER_ERROR);
+  }
 }
 
 async function signUp(req, res) {
