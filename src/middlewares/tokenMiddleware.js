@@ -20,7 +20,7 @@ async function tokenMiddleware(req, res, next) {
     res.sendStatus(STATUS.UNAUTHORIZED);
   }
 
-  req.locals = id;
+  res.locals = { userId: id };
 
   next();
 }

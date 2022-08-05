@@ -12,4 +12,8 @@ const signUpSchema = joi.object({
   confirmPassword: joi.ref('password'),
 });
 
-export { signInSchema, signUpSchema };
+const shortenUrlSchema = joi.object({
+  url: joi.string().required(),
+});
+
+export { signInSchema, signUpSchema, shortenUrlSchema };
