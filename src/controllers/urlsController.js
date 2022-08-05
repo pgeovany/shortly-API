@@ -1,7 +1,9 @@
 import { nanoid } from 'nanoid/async';
 import STATUS from '../utils/statusCodes.js';
+import getUrlByShortUrl from '../utils/urls/getUrlByShortUrl.js';
 import getUrlById from '../utils/urls/getUrlById.js';
 import saveUrl from '../utils/urls/saveUrl.js';
+import updateVisitCount from '../utils/urls/updateVisitCount.js';
 
 async function shortenUrl(req, res) {
   const { userId, url } = res.locals;
@@ -26,13 +28,26 @@ async function getUrl(req, res) {
 
     res.send(url).status(STATUS.OK);
   } catch (error) {
-    console.log(error);
     res.sendStatus(STATUS.INTERNAL_SERVER_ERROR);
   }
 }
 
 async function openUrl(req, res) {
-  res.sendStatus(STATUS.OK);
+  const { shortUrl } = req.params;
+
+  try {
+    const url = await getUrlByShortUrl(shortUrl);
+    if (!url) {
+      res.sendStatus(STATUS.NOT_FOUND);
+      return;
+    }
+
+    await updateVisitCount(url.id);
+
+    res.redirect(url.url);
+  } catch (error) {
+    res.sendStatus(STATUS.INTERNAL_SERVER_ERROR);
+  }
 }
 
 async function deleteUrl(req, res) {
