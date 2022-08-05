@@ -1,5 +1,6 @@
 import { nanoid } from 'nanoid/async';
 import STATUS from '../utils/statusCodes.js';
+import getUrlById from '../utils/urls/getUrlById.js';
 import saveUrl from '../utils/urls/saveUrl.js';
 
 async function shortenUrl(req, res) {
@@ -15,7 +16,19 @@ async function shortenUrl(req, res) {
 }
 
 async function getUrl(req, res) {
-  res.sendStatus(STATUS.OK);
+  const { id } = req.params;
+  try {
+    const url = await getUrlById(id);
+    if (!url) {
+      res.sendStatus(STATUS.NOT_FOUND);
+      return;
+    }
+
+    res.send(url).status(STATUS.OK);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(STATUS.INTERNAL_SERVER_ERROR);
+  }
 }
 
 async function openUrl(req, res) {
