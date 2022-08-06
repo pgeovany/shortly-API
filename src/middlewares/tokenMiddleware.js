@@ -18,6 +18,7 @@ async function tokenMiddleware(req, res, next) {
     id = decoded.id;
   } catch (error) {
     res.sendStatus(STATUS.UNAUTHORIZED);
+    return;
   }
 
   res.locals = { userId: id };

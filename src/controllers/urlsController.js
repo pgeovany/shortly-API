@@ -1,27 +1,26 @@
 import { nanoid } from 'nanoid/async';
 import STATUS from '../utils/statusCodes.js';
-import getUrlByShortUrl from '../utils/urls/getUrlByShortUrl.js';
-import getUrlById from '../utils/urls/getUrlById.js';
-import saveUrl from '../utils/urls/saveUrl.js';
-import updateVisitCount from '../utils/urls/updateVisitCount.js';
-import deleteUrlById from '../utils/urls/deleteUrlById.js';
+import urlsRepository from '../repositories/urlsRepository.js';
 
 async function shortenUrl(req, res) {
   const { userId, url } = res.locals;
+
   try {
     const shortUrl = await nanoid(8);
-    await saveUrl(userId, url, shortUrl);
+    await urlsRepository.saveUrl(userId, url, shortUrl);
 
     res.send({ shortUrl }).status(STATUS.CREATED);
   } catch (error) {
+    console.log(error);
     res.sendStatus(STATUS.INTERNAL_SERVER_ERROR);
   }
 }
 
 async function getUrl(req, res) {
   const { id } = req.params;
+
   try {
-    const url = await getUrlById(id);
+    const url = await urlsRepository.getUrlById(id);
     if (!url) {
       res.sendStatus(STATUS.NOT_FOUND);
       return;
@@ -39,13 +38,13 @@ async function openUrl(req, res) {
   const { shortUrl } = req.params;
 
   try {
-    const url = await getUrlByShortUrl(shortUrl);
+    const url = await urlsRepository.getUrlByShortUrl(shortUrl);
     if (!url) {
       res.sendStatus(STATUS.NOT_FOUND);
       return;
     }
 
-    await updateVisitCount(url.id);
+    await urlsRepository.updateVisitCount(url.id);
 
     res.redirect(url.url);
   } catch (error) {
@@ -58,7 +57,7 @@ async function deleteUrl(req, res) {
   const { id } = req.params;
 
   try {
-    const url = await getUrlById(id);
+    const url = await urlsRepository.getUrlById(id);
 
     if (!url) {
       res.sendStatus(STATUS.NOT_FOUND);
@@ -70,7 +69,7 @@ async function deleteUrl(req, res) {
       return;
     }
 
-    await deleteUrlById(id);
+    await urlsRepository.deleteUrl(id);
 
     res.sendStatus(STATUS.NO_CONTENT);
   } catch (error) {
