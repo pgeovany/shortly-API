@@ -33,9 +33,10 @@ async function getUserVisitCount(id) {
     `
       SELECT users.id, users.name, COUNT (urls.visit_count) as "visitCount"
       FROM users
-      JOIN urls
-      ON urls.user_id = $1
-      GROUP BY users.id;
+      LEFT JOIN urls
+      ON urls.user_id = users.id
+      WHERE users.id = $1
+      GROUP BY users.id
     `,
     [id]
   );
