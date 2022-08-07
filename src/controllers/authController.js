@@ -16,7 +16,7 @@ async function signIn(req, res) {
 
     const token = generateToken(user.id);
 
-    res.send({ token }).status(STATUS.OK);
+    res.status(STATUS.OK).send({ token });
   } catch (error) {
     res.sendStatus(STATUS.INTERNAL_SERVER_ERROR);
   }

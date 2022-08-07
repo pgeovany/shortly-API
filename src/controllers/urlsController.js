@@ -9,7 +9,7 @@ async function shortenUrl(req, res) {
     const shortUrl = await nanoid(8);
     await urlsRepository.saveUrl(userId, url, shortUrl);
 
-    res.send({ shortUrl }).status(STATUS.CREATED);
+    res.status(STATUS.CREATED).send({ shortUrl });
   } catch (error) {
     console.log(error);
     res.sendStatus(STATUS.INTERNAL_SERVER_ERROR);
@@ -28,7 +28,7 @@ async function getUrl(req, res) {
 
     delete url.user_id;
 
-    res.send(url).status(STATUS.OK);
+    res.status(STATUS.OK).send(url);
   } catch (error) {
     res.sendStatus(STATUS.INTERNAL_SERVER_ERROR);
   }

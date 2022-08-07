@@ -64,12 +64,27 @@ async function deleteUrl(id) {
   );
 }
 
+async function getUrlsByUserId(userId) {
+  const { rows } = await connection.query(
+    `
+      SELECT id, short_url AS "shortUrl", url, 
+      visit_count AS "vistiCount" 
+      FROM urls
+      WHERE urls.user_id = $1;
+    `,
+    [userId]
+  );
+
+  return rows;
+}
+
 const urlsRepository = {
   saveUrl,
   getUrlById,
   getUrlByShortUrl,
   updateVisitCount,
   deleteUrl,
+  getUrlsByUserId,
 };
 
 export default urlsRepository;

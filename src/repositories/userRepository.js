@@ -28,9 +28,25 @@ async function createUserAccount({ name, email, password }) {
   );
 }
 
+async function getUserVisitCount(id) {
+  const { rows } = await connection.query(
+    `
+      SELECT users.id, users.name, COUNT (urls.visit_count) as "visitCount"
+      FROM users
+      JOIN urls
+      ON urls.user_id = $1
+      GROUP BY users.id;
+    `,
+    [id]
+  );
+
+  return rows[0];
+}
+
 const userRepository = {
   getUserByEmail,
   createUserAccount,
+  getUserVisitCount,
 };
 
 export default userRepository;
