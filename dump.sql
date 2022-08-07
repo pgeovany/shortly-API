@@ -110,28 +110,6 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 
 --
--- Data for Name: urls; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.urls (id, user_id, url, short_url, visit_count, created_at) FROM stdin;
-9	3	https://www.youtube.com/	_bRhZXH8	1	2022-08-07 12:21:27.883946
-12	2	https://www.github.com	H4TyWRlg	6	2022-08-07 12:25:15.36177
-10	2	https://www.google.com/	9NodBTIv	1	2022-08-07 12:21:55.45511
-\.
-
-
---
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.users (id, name, email, password, created_at) FROM stdin;
-2	Jorge	jorge@gmail.com	$2b$10$WA301E7/NvHZOuvUVt/sNeTu7BXs8/JzUJtbjNL800AV/U0P1GajW	2022-08-04 16:33:08.299628
-3	Jurandir	jurandir@gmail.com	$2b$10$puSLj5qtaUADVSy6z3j/KuoKlJ2u47HMhexag1MoxEYZLNwc908aO	2022-08-04 16:39:33.01483
-4	Mary	mary@gmail.com	$2b$10$Y5s11Hjqzs3byGbRTxeFt.fZdD9SHhIsS9hnyVz4i1GXXEMSEPn.W	2022-08-07 14:08:22.942388
-\.
-
-
---
 -- Name: urls_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
