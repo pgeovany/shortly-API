@@ -17,7 +17,8 @@ async function getUser(req, res) {
 
 async function rankUsers(req, res) {
   try {
-    res.sendStatus(STATUS.OK);
+    const rank = await userRepository.getUsersRank();
+    res.status(STATUS.OK).send(rank);
   } catch (error) {
     res.sendStatus(STATUS.INTERNAL_SERVER_ERROR);
   }

@@ -43,10 +43,28 @@ async function getUserVisitCount(id) {
   return rows[0];
 }
 
+async function getUsersRank() {
+  const { rows } = await connection.query(
+    `
+      SELECT users.id, users.name, COUNT (urls.user_id) AS "linksCount",
+      COALESCE(SUM(urls.visit_count),0) as "visitCount"
+      FROM users
+      LEFT JOIN urls
+      ON urls.user_id = users.id
+      GROUP BY users.id
+      ORDER BY "visitCount" DESC
+      LIMIT 10
+    `
+  );
+
+  return rows;
+}
+
 const userRepository = {
   getUserByEmail,
   createUserAccount,
   getUserVisitCount,
+  getUsersRank,
 };
 
 export default userRepository;
